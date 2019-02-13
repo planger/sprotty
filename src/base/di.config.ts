@@ -38,6 +38,7 @@ import { configureCommand, CommandActionHandlerInitializer } from "./commands/c
 import { CssClassDecorator } from "./views/css-class-decorator";
 import { ToolManager, DefaultToolsEnablingKeyListener, ToolManagerActionHandlerInitializer } from "./tool-manager/tool-manager";
 import { SetModelCommand } from "./features/set-model";
+import { UIExtensionRegistry, UIExtensionActionHandlerInitializer } from "./ui-extensions/ui-extension-registry";
 
 const defaultContainerModule = new ContainerModule((bind, _unbind, isBound) => {
     // Logging ---------------------------------------------
@@ -135,6 +136,10 @@ const defaultContainerModule = new ContainerModule((bind, _unbind, isBound) => {
     bind(TYPES.IToolManager).to(ToolManager).inSingletonScope();
     bind(TYPES.KeyListener).to(DefaultToolsEnablingKeyListener);
     bind(TYPES.IActionHandlerInitializer).to(ToolManagerActionHandlerInitializer);
+
+    // UIExtension registry initialization ------------------------------------
+    bind(TYPES.UIExtensionRegistry).to(UIExtensionRegistry).inSingletonScope();
+    bind(TYPES.IActionHandlerInitializer).to(UIExtensionActionHandlerInitializer);
 });
 
 export default defaultContainerModule;
