@@ -21,15 +21,16 @@ import {
     viewportModule, hoverModule, LocalModelSource, HtmlRootView, PreRenderedView, exportModule, expandModule,
     fadeModule, ExpandButtonView, buttonModule, edgeEditModule, SRoutingHandleView, PreRenderedElement,
     HtmlRoot, SGraph, configureModelElement, SLabel, SCompartment, SEdge, SButton, SRoutingHandle,
-    edgeLayoutModule, updateModule, graphModule, routingModule
+    edgeLayoutModule, updateModule, graphModule, routingModule, commandPaletteModule, RevealNamedElementActionProvider
 } from "../../../src";
-import { ClassNodeView, IconView} from "./views";
+import { ClassNodeView, IconView } from "./views";
 import { PopupModelProvider } from "./popup";
 import { ModelProvider } from './model-provider';
 import { Icon, ClassNode } from "./model";
 
 export default (useWebsocket: boolean, containerId: string) => {
     require("../../../css/sprotty.css");
+    require("../../../css/command-palette.css");
     require("../css/diagram.css");
     const classDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => {
         if (useWebsocket)
@@ -40,6 +41,7 @@ export default (useWebsocket: boolean, containerId: string) => {
         rebind(TYPES.LogLevel).toConstantValue(LogLevel.log);
         bind(TYPES.IPopupModelProvider).to(PopupModelProvider);
         bind(TYPES.StateAwareModelProvider).to(ModelProvider);
+        bind(TYPES.ICommandPaletteActionProvider).to(RevealNamedElementActionProvider);
         const context = { bind, unbind, isBound, rebind };
         configureModelElement(context, 'graph', SGraph, SGraphView);
         configureModelElement(context, 'node:class', ClassNode, ClassNodeView);
@@ -63,7 +65,7 @@ export default (useWebsocket: boolean, containerId: string) => {
 
     const container = new Container();
     container.load(defaultModule, selectModule, moveModule, boundsModule, undoRedoModule,
-        viewportModule, fadeModule, hoverModule, exportModule, expandModule, buttonModule,
+        viewportModule, fadeModule, hoverModule, exportModule, expandModule, buttonModule, commandPaletteModule,
         updateModule, graphModule, routingModule, edgeEditModule, edgeLayoutModule, classDiagramModule);
     return container;
 };
