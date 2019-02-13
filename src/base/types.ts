@@ -62,5 +62,7 @@ export const TYPES = {
     IVNodeDecorator: Symbol('IVNodeDecorator'),
     IToolManager: Symbol('IToolManager'),
     IUIExtension: Symbol('IUIExtension'),
-    UIExtensionRegistry: Symbol('UIExtensionRegistry')
+    UIExtensionRegistry: Symbol('UIExtensionRegistry'),
+    ICommandPaletteActionProviderRegistry: Symbol('ICommandPaletteActionProviderRegistry'),
+    ICommandPaletteActionProvider: Symbol('ICommandPaletteActionProvider')
 };
