@@ -17,12 +17,13 @@
 import { inject, injectable } from "inversify";
 import { Action } from "../base/actions/action";
 import { IActionDispatcher } from "../base/actions/action-dispatcher";
-import { ActionHandlerRegistry, IActionHandler } from "../base/actions/action-handler";
+import { ActionHandlerRegistry, IActionHandler, IActionHandlerInitializer } from "../base/actions/action-handler";
 import { ICommand } from "../base/commands/command";
 import { RequestModelAction } from "../base/features/set-model";
 import { TYPES } from "../base/types";
 import { ViewerOptions } from "../base/views/viewer-options";
 import { ExportSvgAction } from '../features/export/svg-exporter';
+import { SModelRootSchema } from "../base/model/smodel";
 
 /**
  * A model source is serving the model to the event cycle. It represents
@@ -43,19 +44,29 @@ import { ExportSvgAction } from '../features/export/svg-exporter';
  * the client.</li>
  */
 @injectable()
-export abstract class ModelSource implements IActionHandler {
+export abstract class ModelSource implements IActionHandler, IActionHandlerInitializer {
 
-    constructor(@inject(TYPES.IActionDispatcher) readonly actionDispatcher: IActionDispatcher,
-                @inject(TYPES.ActionHandlerRegistry) actionHandlerRegistry: ActionHandlerRegistry,
-                @inject(TYPES.ViewerOptions) protected viewerOptions: ViewerOptions) {
-        this.initialize(actionHandlerRegistry);
-    }
+    @inject(TYPES.IActionDispatcher) readonly actionDispatcher: IActionDispatcher;
+    @inject(TYPES.ViewerOptions) protected viewerOptions: ViewerOptions;
 
-    protected initialize(registry: ActionHandlerRegistry): void {
+    initialize(registry: ActionHandlerRegistry): void {
         // Register this model source
         registry.register(RequestModelAction.KIND, this);
         registry.register(ExportSvgAction.KIND, this);
     }
 
     abstract handle(action: Action): ICommand | Action | void;
+
+    /**
+     * Commit changes from the internal SModel back to the currentModel.
+     *
+     * This method is meant to be called only by CommitModelCommand and other commands
+     * that need to feed the current internal model back to the model source. It does
+     * not have any side effects such as triggering layout or bounds computation, as the
+     * internal model is already current. See `CommitModelAction` for details.
+     *
+     * @param newRoot the new model.
+     * @return the previous model.
+     */
+    abstract commitModel(newRoot: SModelRootSchema): SModelRootSchema;
 }

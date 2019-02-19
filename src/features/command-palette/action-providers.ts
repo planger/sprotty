@@ -42,7 +42,7 @@ export class CommandPaletteActionProviderRegistry implements ICommandPaletteActi
 
     getActions(context: CommandExecutionContext): Promise<LabeledAction[]> {
         const actionLists = this.actionProvider.map(provider => provider.getActions(context));
-        return Promise.all(actionLists).then(p => p.reduce((acc, promise) => promise !== undefined ? acc.concat(promise): acc));
+        return Promise.all(actionLists).then(p => p.reduce((acc, promise) => promise !== undefined ? acc.concat(promise) : acc));
     }
 }
 

@@ -27,9 +27,10 @@ import { DOMHelper } from "./dom-helper";
 @injectable()
 export class MouseTool implements IVNodeDecorator {
 
-    constructor(@inject(TYPES.IActionDispatcher) protected actionDispatcher: IActionDispatcher,
-                @inject(TYPES.DOMHelper) protected domHelper: DOMHelper,
-                @multiInject(TYPES.MouseListener)@optional() protected mouseListeners: MouseListener[] = []) {}
+    @inject(TYPES.IActionDispatcher) protected actionDispatcher: IActionDispatcher;
+    @inject(TYPES.DOMHelper) protected domHelper: DOMHelper;
+
+    constructor(@multiInject(TYPES.MouseListener)@optional() protected mouseListeners: MouseListener[] = []) {}
 
     register(mouseListener: MouseListener) {
         this.mouseListeners.push(mouseListener);
@@ -117,7 +118,7 @@ export class MouseTool implements IVNodeDecorator {
         this.handleEvent('wheel', model, event);
     }
 
-    doubleClick(model: SModelRoot, event: WheelEvent) {
+    doubleClick(model: SModelRoot, event: MouseEvent) {
         this.handleEvent('doubleClick', model, event);
     }
 
@@ -148,10 +149,8 @@ export class MouseTool implements IVNodeDecorator {
 
 @injectable()
 export class PopupMouseTool extends MouseTool {
-    constructor(@inject(TYPES.IActionDispatcher) protected actionDispatcher: IActionDispatcher,
-                @inject(TYPES.DOMHelper) protected domHelper: DOMHelper,
-                @multiInject(TYPES.PopupMouseListener)@optional() protected mouseListeners: MouseListener[] = []) {
-        super(actionDispatcher, domHelper, mouseListeners);
+    constructor(@multiInject(TYPES.PopupMouseListener)@optional() protected mouseListeners: MouseListener[] = []) {
+        super(mouseListeners);
     }
 }
 
@@ -190,7 +189,7 @@ export class MouseListener {
         return [];
     }
 
-    doubleClick(target: SModelElement, event: WheelEvent): (Action | Promise<Action>)[] {
+    doubleClick(target: SModelElement, event: MouseEvent): (Action | Promise<Action>)[] {
         return [];
     }
 
@@ -198,4 +197,3 @@ export class MouseListener {
         return vnode;
     }
 }
-

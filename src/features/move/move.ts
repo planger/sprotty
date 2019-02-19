@@ -31,12 +31,13 @@ import { isCreatingOnDrag } from "../edit/create-on-drag";
 import { DeleteElementAction } from "../edit/delete";
 import { SwitchEditModeAction } from "../edit/edit-routing";
 import { ReconnectAction, ReconnectCommand } from "../edit/reconnect";
-import { isConnectable, SRoutableElement, SRoutingHandle } from "../routing/model";
+import { isConnectable, SRoutableElement, SRoutingHandle, edgeInProgressID, edgeInProgressTargetHandleID } from "../routing/model";
 import { EdgeRouterRegistry, EdgeSnapshot, EdgeMemento } from "../routing/routing";
 import { isSelectable } from "../select/model";
 import { SelectAction, SelectAllAction } from "../select/select";
 import { isViewport } from "../viewport/model";
 import { isLocateable, isMoveable, Locateable } from './model';
+import { CommitModelAction } from "../../model-source/commit-model";
 
 export class MoveAction implements Action {
     kind = MoveCommand.KIND;
@@ -359,8 +360,6 @@ export class MorphEdgesAnimation extends Animation {
     }
 }
 
-export const edgeInProgressID = 'edge-in-progress';
-
 export class MoveMouseListener extends MouseListener {
 
     @inject(EdgeRouterRegistry)@optional() edgeRouterRegistry?: EdgeRouterRegistry;
@@ -384,8 +383,8 @@ export class MoveMouseListener extends MouseListener {
                 result.push(target.createAction(edgeInProgressID));
                 result.push(new SelectAction([edgeInProgressID], []));
                 result.push(new SwitchEditModeAction([edgeInProgressID], []));
-                result.push(new SelectAction([edgeInProgressID + '-target-anchor'], []));
-                result.push(new SwitchEditModeAction([edgeInProgressID + '-target-anchor'], []));
+                result.push(new SelectAction([edgeInProgressTargetHandleID], []));
+                result.push(new SwitchEditModeAction([edgeInProgressTargetHandleID], []));
             } else if (isRoutingHandle) {
                 result.push(new SwitchEditModeAction([target.id], []));
             }
@@ -497,6 +496,7 @@ export class MoveMouseListener extends MouseListener {
                 result.push(new DeleteElementAction(deleteIds));
             }
         }
+        result.push(new CommitModelAction());
         this.hasDragged = false;
         this.lastDragPosition = undefined;
         return result;

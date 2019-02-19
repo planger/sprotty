@@ -19,7 +19,7 @@ export const TYPES = {
     IActionDispatcher: Symbol('IActionDispatcher'),
     IActionDispatcherProvider: Symbol('IActionDispatcherProvider'),
     IActionHandlerInitializer: Symbol('IActionHandlerInitializer'),
-    ActionHandlerRegistry: Symbol('ActionHandlerRegistry'),
+    ActionHandlerRegistryProvider: Symbol('ActionHandlerRegistryProvider'),
     IAnchorComputer: Symbol('IAnchor'),
     AnimationFrameSyncer: Symbol('AnimationFrameSyncer'),
     CommandStackOptions: Symbol('CommandStackOptions'),
@@ -42,17 +42,11 @@ export const TYPES = {
     ModelSource: Symbol('ModelSource'),
     ModelSourceProvider: Symbol('ModelSourceProvider'),
     MouseListener: Symbol('MouseListener'),
-    /**
-     * @deprecated Use IPopupModelProvider instead.
-     */
-    PopupModelFactory: Symbol('PopupModelFactory'),
     IPopupModelProvider: Symbol('IPopupModelProvider'),
     PopupMouseListener: Symbol('PopupMouseListener'),
     PopupVNodeDecorator: Symbol('PopupVNodeDecorator'),
     SModelElementRegistration: Symbol('SModelElementRegistration'),
     SModelRegistry: Symbol('SModelRegistry'),
-    SModelStorage: Symbol('SModelStorage'),
-    StateAwareModelProvider: Symbol('StateAwareModelProvider'),
     SvgExporter: Symbol('SvgExporter'),
     IViewer: Symbol('IViewer'),
     ViewerOptions: Symbol('ViewerOptions'),

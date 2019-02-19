@@ -15,7 +15,6 @@
  ********************************************************************************/
 
 import { ContainerModule, interfaces } from "inversify";
-import { SModelStorage } from './model/smodel-storage';
 import { TYPES } from "./types";
 import { CanvasBoundsInitializer, InitializeCanvasBoundsCommand } from './features/initialize-canvas';
 import { LogLevel, NullLogger } from "../utils/logging";
@@ -47,7 +46,14 @@ const defaultContainerModule = new ContainerModule((bind, _unbind, isBound) => {
 
     // Registries ---------------------------------------------
     bind(TYPES.SModelRegistry).to(SModelRegistry).inSingletonScope();
-    bind(TYPES.ActionHandlerRegistry).to(ActionHandlerRegistry).inSingletonScope();
+    bind(ActionHandlerRegistry).toSelf().inSingletonScope();
+    bind(TYPES.ActionHandlerRegistryProvider).toProvider<ActionHandlerRegistry>((context) => {
+        return () => {
+            return new Promise<ActionHandlerRegistry>((resolve) => {
+                resolve(context.container.get<ActionHandlerRegistry>(ActionHandlerRegistry));
+            });
+        };
+    });
     bind(TYPES.ViewRegistry).to(ViewRegistry).inSingletonScope();
 
     // Model Creation ---------------------------------------------
@@ -127,7 +133,6 @@ const defaultContainerModule = new ContainerModule((bind, _unbind, isBound) => {
     configureCommand({ bind, isBound }, InitializeCanvasBoundsCommand);
     bind(CanvasBoundsInitializer).toSelf().inSingletonScope();
     bind(TYPES.IVNodeDecorator).toService(CanvasBoundsInitializer);
-    bind(TYPES.SModelStorage).to(SModelStorage).inSingletonScope();
 
     // Model commands ---------------------------------------------
     configureCommand({ bind, isBound }, SetModelCommand);
