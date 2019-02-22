@@ -144,7 +144,9 @@ const defaultContainerModule = new ContainerModule((bind, _unbind, isBound) => {
 
     // UIExtension registry initialization ------------------------------------
     bind(TYPES.UIExtensionRegistry).to(UIExtensionRegistry).inSingletonScope();
-    bind(TYPES.IActionHandlerInitializer).to(UIExtensionActionHandlerInitializer);
+    configureCommand({ bind, isBound }, ShowUIExensionCommand);
+    configureCommand({ bind, isBound }, HideUIExtensionCommand);
+
 });
 
 export default defaultContainerModule;

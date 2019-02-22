@@ -145,7 +145,6 @@ export class ClassDiagramModelSource extends LocalModelSource {
         const node0 = {
             id: 'node0',
             type: 'node:class',
-            name: 'Foo',
             expanded: false,
             position: {
                 x: 100,
@@ -189,7 +188,6 @@ export class ClassDiagramModelSource extends LocalModelSource {
         const node1 = {
             id: 'node1',
             type: 'node:class',
-            name: 'Bar',
             expanded: false,
             position: {
                 x: 500,
@@ -231,7 +229,6 @@ export class ClassDiagramModelSource extends LocalModelSource {
         const node2 = {
             id: 'node2',
             type: 'node:class',
-            name: 'Baz',
             expanded: false,
             position: {
                 x: 200,
